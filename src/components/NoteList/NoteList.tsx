@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Note } from "../../types/note";
-import css from "./TaskList.module.css";
+import css from "./NoteList.module.css";
 
 import { deleteNote, updateNote } from "../../services/noteService";
 
@@ -39,7 +39,7 @@ export default function NoteList({ notes }: NoteListProps) {
           return a.completed ? 1 : -1;
         })
         .map((task) => (
-          <li key={task.id} className={css.item}>
+          <li key={task.id} className={css.listItem}>
             <input
               type="checkbox"
               defaultChecked={task.completed}
@@ -50,7 +50,7 @@ export default function NoteList({ notes }: NoteListProps) {
                 ])
               }
             />
-            <span className={css.text}>{task.text}</span>
+            <span className={css.title}>{task.text}</span>
             <button
               type="button"
               className={css.button}

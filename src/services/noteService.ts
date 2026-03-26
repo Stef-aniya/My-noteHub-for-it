@@ -2,14 +2,24 @@ import axios from "axios";
 
 import type { Note, CreateNote, UpdateNote } from "../types/note";
 
-axios.defaults.baseURL = "https://notehub-public.goit.study/api/docs";
+axios.defaults.headers.common["Authorization"] =
+  `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`;
 
-export const getNotes = async (search: string): Promise<Note[]> => {
-  const res = await axios.get<Note[]>("/notes", {
+axios.defaults.baseURL = "https://notehub-public.goit.study/api";
+
+export const getNotes = async (
+  search: string,
+  page: number,
+  perPage: number,
+): Promise<{ notes: Note[]; totalPages: number }> => {
+  const res = await axios.get("/notes", {
     params: {
       search,
+      page,
+      perPage,
     },
   });
+
   return res.data;
 };
 

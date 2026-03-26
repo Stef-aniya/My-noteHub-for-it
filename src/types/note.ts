@@ -1,13 +1,18 @@
 export interface Note {
   id: string;
-  text: string;
-  completed: boolean;
+  title: string;
+  content: string;
+  tag: string;
 }
 
 export interface CreateNote {
-  text: string;
+  title: string;
+  content: string;
+  tag: string;
 }
 
 export interface UpdateNote {
-  completed: boolean;
+  title?: string;
+  content?: string;
+  tag?: string;
 }

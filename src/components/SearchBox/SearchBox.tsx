@@ -14,8 +14,8 @@ function SearchBox({ search, onSearch }: SearchBoxProps) {
     <input
       type="text"
       placeholder="Search"
-      className={css.searchInput}
-      defaultValue={search}
+      className={css.input}
+      value={search}
       onChange={handleChange}
     />
   );
