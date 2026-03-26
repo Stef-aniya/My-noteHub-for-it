@@ -1,20 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Task } from "../../types/task";
+import type { Note } from "../../types/note";
 import css from "./TaskList.module.css";
 
-import { deleteTask, updateTask } from "../../services/noteService";
+import { deleteNote, updateNote } from "../../services/noteService";
 
-interface TaskListProps {
-  tasks: Task[];
+interface NoteListProps {
+  notes: Note[];
 }
 
-export default function TaskList({ tasks }: TaskListProps) {
+export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
 
   const deleteTaskM = useMutation({
-    mutationFn: deleteTask,
+    mutationFn: deleteNote,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
     onError: (error) => {
       console.error(error);
@@ -22,9 +22,9 @@ export default function TaskList({ tasks }: TaskListProps) {
   });
 
   const updateTaskM = useMutation({
-    mutationFn: updateTask,
+    mutationFn: updateNote,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
     onError: (error) => {
       console.error(error);
@@ -33,7 +33,7 @@ export default function TaskList({ tasks }: TaskListProps) {
 
   return (
     <ul className={css.list}>
-      {tasks
+      {notes
         .toSorted((a, b) => {
           if (a.completed === b.completed) return 0;
           return a.completed ? 1 : -1;

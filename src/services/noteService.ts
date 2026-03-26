@@ -1,11 +1,11 @@
 import axios from "axios";
 
-import type { Task, CreateTask, UpdateTask } from "../types/task";
+import type { Note, CreateNote, UpdateNote } from "../types/note";
 
-axios.defaults.baseURL = "https://62584f320c918296a49543e7.mockapi.io";
+axios.defaults.baseURL = "https://notehub-public.goit.study/api/docs";
 
-export const getTasks = async (search: string): Promise<Task[]> => {
-  const res = await axios.get<Task[]>("/tasks", {
+export const getNotes = async (search: string): Promise<Note[]> => {
+  const res = await axios.get<Note[]>("/notes", {
     params: {
       search,
     },
@@ -13,19 +13,19 @@ export const getTasks = async (search: string): Promise<Task[]> => {
   return res.data;
 };
 
-export const createTask = async (payload: CreateTask): Promise<Task> => {
-  const { data } = await axios.post<Task>("/tasks", payload);
+export const createNote = async (payload: CreateNote): Promise<Note> => {
+  const { data } = await axios.post<Note>("/notes", payload);
   return data;
 };
 
-export const deleteTask = async (taskId: Task["id"]): Promise<void> => {
-  await axios.delete(`/tasks/${taskId}`);
+export const deleteNote = async (taskId: Note["id"]): Promise<void> => {
+  await axios.delete(`/notes/${taskId}`);
 };
 
-export const updateTask = async ([taskId, payload]: [
-  Task["id"],
-  UpdateTask,
-]): Promise<Task> => {
-  const { data } = await axios.put<Task>(`/tasks/${taskId}`, payload);
+export const updateNote = async ([taskId, payload]: [
+  Note["id"],
+  UpdateNote,
+]): Promise<Note> => {
+  const { data } = await axios.put<Note>(`/notes/${taskId}`, payload);
   return data;
 };

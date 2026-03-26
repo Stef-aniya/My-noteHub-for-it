@@ -2,12 +2,11 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDebouncedCallback } from "use-debounce";
 import SearchBox from "./components/SearchBox/SearchBox";
-import TaskList from "./components/NoteList/NoteList";
+import NoteList from "./components/NoteList/NoteList";
 import Modal from "./components/Modal/Modal";
-import TaskForm from "./components/NoteForm/NoteForm";
-import { getTasks } from "./services/noteService";
+import NoteForm from "./components/NoteForm/NoteForm";
+import { getNotes } from "./services/noteService";
 import css from "./App.module.css";
-
 import useModalControl from "./hooks/useModalControl";
 
 export default function App() {
@@ -20,8 +19,8 @@ export default function App() {
   }, 1000);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["tasks", search],
-    queryFn: () => getTasks(search),
+    queryKey: ["notes", search],
+    queryFn: () => getNotes(search),
   });
 
   return (
@@ -33,10 +32,10 @@ export default function App() {
         </button>
       </header>
       {isLoading && <strong className={css.loading}>Loading tasks...</strong>}
-      {data && !isLoading && <TaskList tasks={data} />}
+      {data && !isLoading && <NoteList notes={data} />}
       {isModalOpen && (
         <Modal onClose={closeModal}>
-          <TaskForm onSuccess={closeModal} />
+          <NoteForm onSuccess={closeModal} />
         </Modal>
       )}
     </div>

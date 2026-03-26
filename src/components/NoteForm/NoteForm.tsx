@@ -1,20 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import css from "./TaskForm.module.css";
 
-import { createTask } from "../../services/noteService";
+import { createNote } from "../../services/noteService";
 
-interface TaskFormProps {
+interface NoteFormProps {
   onSuccess: () => void;
 }
 
-export default function TaskForm({ onSuccess }: TaskFormProps) {
+export default function NoteForm({ onSuccess }: NoteFormProps) {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: createTask,
+    mutationFn: createNote,
     onSuccess: (data) => {
       console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
       onSuccess();
     },
     onError: (error) => {

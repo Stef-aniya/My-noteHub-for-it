@@ -1,13 +1,13 @@
-export interface Task {
+export interface Note {
   id: string;
   text: string;
   completed: boolean;
 }
 
-export interface CreateTask {
+export interface CreateNote {
   text: string;
 }
 
-export interface UpdateTask {
+export interface UpdateNote {
   completed: boolean;
 }
