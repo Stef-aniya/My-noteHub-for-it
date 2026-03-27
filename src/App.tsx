@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDebouncedCallback } from "use-debounce";
+
 import SearchBox from "./components/SearchBox/SearchBox";
 import NoteList from "./components/NoteList/NoteList";
 import Modal from "./components/Modal/Modal";
 import NoteForm from "./components/NoteForm/NoteForm";
-import { getNotes } from "./services/noteService";
-import css from "./App.module.css";
-import useModalControl from "./hooks/useModalControl";
-import { keepPreviousData } from "@tanstack/react-query";
 import Pagination from "./components/Pagination/Pagination";
+
+import { getNotes } from "./services/noteService";
+import useModalControl from "./hooks/useModalControl";
+import css from "./App.module.css";
 
 export default function App() {
   const [search, setSearch] = useState("");
@@ -19,14 +20,20 @@ export default function App() {
 
   const handleSearch = useDebouncedCallback((value: string) => {
     setSearch(value);
-  }, 1000);
+    setPage(1);
+  }, 500);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["notes", search, page],
     queryFn: () => getNotes(search, page),
-    keepPreviousData: true,
   });
 
+  const notes = data?.data || [];
+  const totalPages = data?.totalPages || 0;
+
+  const handlePageChange = ({ selected }: { selected: number }) => {
+    setPage(selected + 1);
+  };
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
@@ -35,19 +42,24 @@ export default function App() {
           Create note +
         </button>
       </header>
-      {isLoading && <strong className={css.loading}>Loading tasks...</strong>}
-      {data?.length > 0 && !isLoading && <NoteList notes={data} />}
+
+      {isLoading && <strong className={css.loading}>Loading notes...</strong>}
+      {error && <strong className={css.error}>Error loading notes</strong>}
+
+      {notes.length > 0 && <NoteList notes={notes} />}
+
       {isModalOpen && (
         <Modal onClose={closeModal}>
           <NoteForm onSuccess={closeModal} />
         </Modal>
       )}
-      {data?.totalPages > 1 &&(
+
+      {totalPages > 1 && (
         <Pagination
-          pages={data.totalPages}
-          perPage={12}
-          onPageChange={(page) => setPage(page)}
-        />,
+          pageCount={totalPages}
+          currentPage={page}
+          onPageChange={handlePageChange}
+        />
       )}
     </div>
   );

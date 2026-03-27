@@ -7,22 +7,26 @@ axios.defaults.headers.common["Authorization"] =
 
 axios.defaults.baseURL = "https://notehub-public.goit.study/api";
 
+interface FetchNotesResponse {
+  data: Note[];
+  totalPages: number;
+}
+
 export const getNotes = async (
   search: string,
   page: number,
-  perPage: number,
-): Promise<{ notes: Note[]; totalPages: number }> => {
-  const res = await axios.get("/notes", {
-    params: {
-      search,
-      page,
-      perPage,
+  perPage = 12,
+): Promise<FetchNotesResponse> => {
+  const token = import.meta.env.VITE_NOTEHUB_TOKEN;
+  const response = await axios.get(
+    "https://notehub-public.goit.study/api/notes",
+    {
+      params: { search, page, perPage },
+      headers: { Authorization: `Bearer ${token}` },
     },
-  });
-
-  return res.data;
+  );
+  return response.data;
 };
-
 export const createNote = async (payload: CreateNote): Promise<Note> => {
   const { data } = await axios.post<Note>("/notes", payload);
   return data;
